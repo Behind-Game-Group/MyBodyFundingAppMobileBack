@@ -1,0 +1,92 @@
+#
+# Will start all docker constructions with MySQL
+#
+# Java img construction is controlled by Dockerfile
+# Spring boot options are given at line ~31
+#
+# Password and network ports are handled in .env file
+#
+version: "3.9"
+name: mybody-funding-project-mysql
+
+services:
+  mysql_sl_db:
+    image: mysql:8.0.27
+    restart: unless-stopped
+    env_file: ./.env
+    container_name: mysql_sl_db
+    hostname: mysql_sl_db
+    environment:
+      - MYSQL_ROOT_PASSWORD=$DB_ROOT_PASSWORD
+      - MYSQL_DATABASE=$DB_DATABASE
+      - MYSQL_USER=$DB_USER
+      - MYSQL_PASSWORD=$DB_USER_PASSWORD
+      - MYSQL_ALLOW_EMPTY_PASSWORD=no
+    ports:
+      - $DB_LOCAL_PORT:$DB_DOCKER_PORT
+    # We have two volumes
+    # one file=bind: the dump of the db. This should prevail docker to
+    #                mount a file 'as' a directory
+    # one volume=volume: where to keep datas. It is a directory
+    volumes:
+      - type: bind
+        source: ./dump/insert.sql
+        target: /docker-entrypoint-initdb.d/insert.sql
+        read_only: true
+      - type: volume
+        source: vol_mysql_sl_db
+        target: /var/lib/mysql
+
+  # https://hub.docker.com/_/phpmyadmin
+  phpmyadmin_sl:
+    image: phpmyadmin:latest
+    depends_on:
+      - mysql_sl_db
+    container_name: phpmyadmin_sl
+    links:
+      - mysql_sl_db
+    restart: unless-stopped
+    ports:
+      - $PMA_LOCAL_PORT:$PMA_DOCKER_PORT
+    environment:
+      - PMA_HOST=mysql_sl_db
+      - PMA_PORT=$DB_DOCKER_PORT
+      - PMA_USER=root
+      - PMA_PASSWORD=$DB_ROOT_PASSWORD
+      - PMA_ARBITRARY=1
+
+  # Application Java
+  java_app_sl:
+    depends_on:
+      - mysql_sl_db
+    build: ../../../myBodyFunding
+    restart: unless-stopped
+    container_name: java_app_sl
+    ports:
+      - $SPRING_LOCAL_PORT:$SPRING_DOCKER_PORT
+    links:
+      - mysql_sl_db
+    environment:
+      # Sets with "spring.profiles.active" : "mysql,unsecured" if you want
+      SPRING_APPLICATION_JSON: '{
+        "spring.profiles.active" : "mysql",
+        "spring.datasource.url"  : "jdbc:mysql://mysql_sl_db:$DB_DOCKER_PORT/$DB_DATABASE?useSSL=false&serverTimezone=Europe/Paris&allowPublicKeyRetrieval=true",
+        "spring.datasource.username" : "$DB_USER",
+        "spring.datasource.password" : "$DB_USER_PASSWORD",
+        "spring.server.port" : "$SPRING_DOCKER_PORT"}'
+    volumes:
+      - ../.m2:/root/.m2
+    stdin_open: true
+    tty: true
+
+volumes:
+  vol_mysql_sl_db:
+
+
+#
+# Run all  : docker-compose up
+# Stop all : docker-compose down
+# Stop all and delte all img : docker-compose down --rmi all
+#
+# After start, in order to see if database is ok
+# In docker cli (for mysql) :  mysql -h 127.0.0.1 -u root -P 3306 -p

@@ -1,0 +1,11 @@
+ooo        ooooo                oooooooooo.                  .o8                 oooooooooooo                               .o8   o8o                         
+`88.       .888'                `888'   `Y8b                "888                 `888'     `8                              "888   `"'                         
+ 888b     d'888  oooo    ooo     888     888  .ooooo.   .oooo888  oooo    ooo     888         oooo  oooo  ooo. .oo.    .oooo888  oooo  ooo. .oo.    .oooooooo 
+ 8 Y88. .P  888   `88.  .8'      888oooo888' d88' `88b d88' `888   `88.  .8'      888oooo8    `888  `888  `888P"Y88b  d88' `888  `888  `888P"Y88b  888' `88b  
+ 8  `888'   888    `88..8'       888    `88b 888   888 888   888    `88..8'       888    "     888   888   888   888  888   888   888   888   888  888   888  
+ 8    Y     888     `888'        888    .88P 888   888 888   888     `888'        888          888   888   888   888  888   888   888   888   888  `88bod8P'  
+o8o        o888o     .8'        o888bood8P'  `Y8bod8P' `Y8bod88P"     .8'        o888o         `V88V"V8P' o888o o888o `Y8bod88P" o888o o888o o888o `8oooooo.  
+                 .o..P'                                           .o..P'                                                                           d"     YD  
+                 `Y8P'                                            `Y8P'                                                                            "Y88888P'  
+                                                                                                                                                              
+v1.0.0 - 29-04-2023																																							  

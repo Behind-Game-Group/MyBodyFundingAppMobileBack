@@ -1,0 +1,14 @@
+.classpath
+.project
+.settings/
+.idea/
+.jpb/
+.apt_generated/
+.apt_generated_tests/
+target/
+Thumbs.db
+*.log
+*.bak
+*.iml
+*.yml
+docker/
